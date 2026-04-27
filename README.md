@@ -6,7 +6,13 @@ This repository contains the dataset and training pipeline used to fine-tune a b
 
 - __Reasoning:__ Phi-3-mini was chosen for its high efficiency-to-performance ratio. Its small parameter count allows for rapid fine-tuning and inference on consumer-grade GPUs (like the Tesla T4 used in this project) while maintaining strong instruction-following capabilities.
 
-## 2. Dataset Construction
+## 2. Fine-Tuned Model
+- **Model:** Phi-3-mini (LoRA Fine-Tuned Wellness Coach)  
+- **Download Link:** https://drive.google.com/file/d/1-4TuEY9-qm9sQ5Wsk0Zn-HQe0svLadXA/view?usp=sharing  
+
+- **Method:** QLoRA (LoRA adapters with 4-bit quantization)  
+
+## 3. Dataset Construction
 The dataset consists of __150 manually curated (prompt, completion) pairs.__
 
 __Curation Strategy:__
@@ -16,7 +22,7 @@ __Curation Strategy:__
 
 - __Refinement:__ I removed pairs that felt too clinical or purely medical, ensuring the model stays within the boundaries of a "coach" rather than a doctor.
 
-## 3. Training Configuration
+## 4. Training Configuration
 I utilized __QLoRA (4-bit Quantization)__ to fine-tune the model efficiently.
 
 - __Quantization:__ 4-bit NormalFloat (NF4) with double quantization to reduce VRAM footprint.
@@ -33,7 +39,7 @@ I utilized __QLoRA (4-bit Quantization)__ to fine-tune the model efficiently.
 
   - Batch Size: 1 with 4-step Gradient Accumulation.
 
-## 4. Evaluation & The "Visible Gap"
+## 5. Evaluation & The "Visible Gap"
 To ensure a fair test, both models were tested with identical inference parameters: Temperature=0.3, Top_p=0.85, and Max_New_Tokens=750.
 
 __Comparison 1: Acute Sleep Deprivation (Safety & Immediate Action)__
@@ -71,14 +77,14 @@ __Comparison 5: High-Stakes Medication Safety__
 
 - __Fine-Tuned Coach:__ Immediately prioritized safety by instructing the user to contact their healthcare provider. It maintained the coach persona by helping the user stay calm ("don't panic") while strictly adhering to professional boundaries.
 
-## 5. Failure Modes & Honest Assessment
+## 6. Failure Modes & Honest Assessment
 - __Numerical Grounding:__ In one instance, the model referenced "three hours" instead of "three days." While the tone was correct, the precision on specific entities can still be improved.
 
 - __Over-Refusal Risk:__ Due to strong safety training, the model may occasionally be too quick to suggest a professional therapist for minor stressors.
 
 - __Tone Repetition:__ With a low temperature (0.3), the model sometimes repeats closing phrases like "You don’t have to solve everything at once!" across different prompts.
 
-## 6. Future Improvements
+## 7. Future Improvements
 - __RAG Integration:__ Connect the model to a verified library of wellness articles to improve factual accuracy regarding science-backed techniques.
 
 - __DPO (Direct Preference Optimization):__ Use a preference dataset to further refine the "warmth" of the model without sacrificing numerical precision.
